@@ -1,0 +1,41 @@
+This repository has been created to do a benchmark between the CDC and Endpoint used for USB communication between devices.
+
+
+To do this Benchmark, we disposed of a Raspberry Pi PICO (RP2040) and a PC to communicate with the RP2040.
+We will be coding on a Ubunutu 20.40 virtual machine, and we will use VisualStudio Code and arduino IDE to code the python Scripts and the firmwares.
+
+In order to work with USB, we need to configure our devices on mode host and device. 
+The PC will be the host witch means it will be the master and the the RP2040 is the device.
+
+CDC class is the uper level USB protocole, and the data will transmit by endpoints.
+The Endpoint protocole is the lower level and the goal will be to send data to a specific endpoint address.
+
+In order to do our benchmark, we will focalise on the transfert speed, and the maximum size of a packet during a transfert.
+Our goal will consist to send and receive 100 000 caracters in CDC and Endpoint Mode.
+However, the Raspberry Pi Pico can only receive 64 caracters per transfert, therefort, the PC will send packets of 64 caracters before attending 100 000.
+
+
+As mentionned, the RP has to be configured to receive data in CDC and EndPoint "mode". Thanks to the pico-examples repository (https://github.com/raspberrypi/pico-examples) and
+the pySerial documantation, we have coded two firmware. One for the Endpoint test and an other one for the CDC test.
+
+At the PC level, we have coded two python scripts.
+For the Endpoint test, we will find the first address of the Endpoint and write and read 64 caracters until we have achieved 100 O00 caracters.
+For the CDC test, we used pySerial documentation and Arduino IDE to code the Pico Firmware.
+
+To realize a test, the following steps have to bee done :
+The Pico has to be in bootsell mode. Witch means the device is ready to receive a binary file (uf2) corresponding to the firmware.
+Cross compile the firmware to The Pico
+Once the firmware on the Pico, the virtual Machine shall detect a new Device (Raspberry Pi Pico for CDC mode and RP2040 of Paul Fisher for Endpoint Mode)
+Select the created device
+run the python script on the devices selected.
+The Python code start and stop and Timer during the transfert process.
+
+The results are the following : 
+23 seconds to send and receive 100000 caracters in Endpoint mode
+30 seconds to send and receive 100000 caracters in CDC mode.
+
+Therefort, more optimisation need to be done for example, by modifyng the baud rate of the Pico with was seted to 115200 for the benchmark.
+and by optimizing the firmware code and remove function who can have a impact on the time transfert.
+
+The next goal, is to optimize the firmware codes to be able to do a real comparaison between CDC and Endpoint.
+
